@@ -1,5 +1,6 @@
 dependency-injector==4.41.0
 flask==2.3.2
+flask_healthz==0.0.3
 pygithub==1.59.0
 pyyaml==6.0
 pytest-flask==1.2.0

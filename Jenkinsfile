@@ -44,7 +44,8 @@ pipeline {
       stage('Test') {
           steps {
               container('dind') {
-                  sh 'docker exec -it lirondadon/my-pub-ip:$TAG pytest'
+                  sh 'docker run -d --name my-pub-ip lirondadon/my-pub-ip:$TAG'
+                  sh 'docker exec my-pub-ip pytest'
               }
           }
       }

@@ -33,6 +33,12 @@ pipeline {
         }
     }
     stages {
+      stage('Clone') {
+          steps {
+              git branch: 'main', credentialsId: 'github', url: 'git@github.com:lirond101/my-pub-ip.git'
+          }
+      }
+
       stage('Build') {
           steps {
               container('dind') {
@@ -44,7 +50,8 @@ pipeline {
       stage('Test') {
           steps {
               container('dind') {
-                  sh 'docker exec -it lirondadon/my-pub-ip:$TAG pytest'
+                  sh 'docker run -d --name my-pub-ip lirondadon/my-pub-ip:$TAG'
+                  sh 'docker exec my-pub-ip pytest'
               }
           }
       }

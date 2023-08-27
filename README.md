@@ -11,3 +11,5 @@
    ```
 
 3. If no errors appear in the log, the app should run on `http://localhost:5000`
+
+4. Enjoy!

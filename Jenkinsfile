@@ -2,10 +2,9 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub.id')
-        BUILD_NUMBER = "${env.BUILD_ID}"
+        TAG = VersionNumber (versionNumberString: '${BUILD_DATE_FORMATTED, "ddMMyyyy"}-jenkins-cicd-${BUILDS_TODAY}')
         GITHUB_USERNAME = "lirond101"
         GITHUB_EMAIL = "lirond101@gmail.com"
-        TARGET_BRANCH = "master"
     }
     agent {
         kubernetes {
@@ -34,12 +33,35 @@ pipeline {
         }
     }
     stages {
-        stage('Info Docker') {
-            steps {
-                container('dind') {
-                    sh 'docker info'
-                }
-            }
-        }
-    }
+      stage('Build') {
+          steps {
+              container('dind') {
+                  sh 'docker build --network=host -t lirondadon/my-pub-ip:$TAG .'
+              }
+          }
+      }
+
+      stage('Test') {
+          steps {
+              container('dind') {
+                  sh 'docker exec -it lirondadon/my-pub-ip:$TAG pytest'
+              }
+          }
+      }
+
+      stage('Push') {
+          steps {
+              container('dind') {
+                  sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                  sh 'docker push lirondadon/my-pub-ip:$TAG'
+              }
+          }
+      }
+
+      stage('Deploy') {
+          steps {
+              build job: "CD-my-pub-ip", wait: true, parameters: [string(name: 'TAG', value:TAG)]
+          }
+      }
+   }
 }

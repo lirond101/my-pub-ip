@@ -5,8 +5,6 @@ import json_logging
 
 
 def init_logging():
-    json_logging.init_flask(enable_json=True)
-
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
     logger.addHandler(logging.StreamHandler(sys.stdout))

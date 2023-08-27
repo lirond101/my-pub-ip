@@ -33,12 +33,6 @@ pipeline {
         }
     }
     stages {
-      stage('Clone') {
-          steps {
-              git branch: 'main', credentialsId: 'github', url: 'git@github.com:lirond101/my-pub-ip.git'
-          }
-      }
-
       stage('Build') {
           steps {
               container('dind') {

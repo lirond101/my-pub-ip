@@ -1,15 +1,22 @@
-FROM python:3.9-slim-bullseye
+FROM python:3.10-slim-bullseye@sha256:9d1db839c73288a0c3a44000deffaaead48695cb5144daf9ae9f836235291398
 
 USER root
 
-RUN mkdir -p /app/my-pub-ip
+RUN mkdir -p /usr/app
 
-COPY requirements.txt /app/my-pub-ip/requirements.txt
+WORKDIR /usr/app
 
-RUN pip3 install -r /app/my-pub-ip/requirements.txt
+COPY requirements.txt /usr/app/requirements.txt
 
-COPY . /app/my-pub-ip
+RUN pip3 install -r /usr/app/requirements.txt
 
-WORKDIR /app/my-pub-ip
+RUN groupadd -g 999 python && \
+    useradd -r -u 999 -g python python
 
-CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+RUN chown python:python /usr/app
+
+COPY . /usr/app
+
+USER python
+
+CMD [ "gunicorn", "--bind" , "0.0.0.0:5000", "--log-level", "debug", "--timeout", "5", "--threads", "2", "app:app"]

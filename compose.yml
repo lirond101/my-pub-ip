@@ -1,0 +1,28 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+
+  vault:
+    image: hashicorp/vault:latest
+    restart: always
+    privileged: true
+    cap_add: 
+      - IPC_LOCK
+    ports:
+      - "8200"
+    environment:
+      - "VAULT_DEV_ROOT_TOKEN_ID=myroot"
+
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: mysecretpassword
+
+  app:
+    build: .
+    restart: always
+    ports:
+      - 5001:5000

@@ -1,6 +1,7 @@
 import logging
 from flask import Flask, jsonify, request
 from utils.app_logging import init_logging
+from db import check_db_connection
 
 app = Flask(__name__)
 # app.config.from_pyfile('config.py')
@@ -20,7 +21,7 @@ def get_pub_ip():
 
 @app.route('/healthz', methods=['GET'])
 def health_check():
-    return jsonify({'status': 200, 'title': 'OK'}), 200
+    return jsonify({'status': 200, 'app': 'OK', 'db': check_db_connection()}), 200
 
 if __name__ == '__main__':
     app.run(debug=True)

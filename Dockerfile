@@ -8,6 +8,11 @@ WORKDIR /usr/app
 
 COPY requirements.txt /usr/app/requirements.txt
 
+RUN apt-get update && apt-get install -y \
+  bash \
+  iproute2 \
+  && rm -rf /var/lib/apt/lists/*
+
 RUN pip3 install -r /usr/app/requirements.txt
 
 RUN groupadd -g 999 python && \

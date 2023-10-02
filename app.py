@@ -2,9 +2,9 @@ import logging
 from flask import Flask, jsonify, request
 from utils.app_logging import init_logging
 from db import check_db_connection
+import ifcfg
 
 app = Flask(__name__)
-# app.config.from_pyfile('config.py')
 
 logger = init_logging()
 
@@ -18,6 +18,15 @@ def get_pub_ip():
     except Exception as ex:
         logger.exception(ex)
         return jsonify({'error': 'error fetching public ip address'}), 500
+
+
+@app.route('/network', methods=['GET'])
+def get_network_ip():
+    try:
+        return jsonify(ifcfg.interfaces()), 200
+    except Exception as ex:
+        logger.exception(ex)
+        return jsonify({'error': 'error fetching network details because ' + str(ex)}), 500
 
 @app.route('/healthz', methods=['GET'])
 def health_check():

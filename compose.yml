@@ -1,8 +1,14 @@
-# Use postgres/example user/password credentials
 version: '3.1'
 
 services:
-
+  nginx:
+    image: nginx:latest
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    network_mode: host
+      
   vault:
     image: hashicorp/vault:latest
     restart: always
@@ -10,10 +16,9 @@ services:
     cap_add: 
       - IPC_LOCK
     ports:
-      - "8200"
+      - 8200
     environment:
       - "VAULT_DEV_ROOT_TOKEN_ID=myroot"
-
 
   db:
     image: postgres
@@ -25,4 +30,4 @@ services:
     build: .
     restart: always
     ports:
-      - 5001:5000
+      - 5000:5000

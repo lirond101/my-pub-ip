@@ -2,6 +2,8 @@ version: '3.1'
 
 services:
   nginx:
+    depends_on:
+      - app
     image: nginx:latest
     ports:
       - 80:80
@@ -23,6 +25,9 @@ services:
       - "VAULT_DEV_ROOT_TOKEN_ID=myroot"
 
   db:
+    depends_on:
+      - app
+      - vault
     image: postgres
     restart: always
     environment:
@@ -30,8 +35,8 @@ services:
 
   app:
     depends_on:
-      - nginx
+      - vault
     build: .
     restart: always
     ports:
-      - 5000:5000
+      - 5000

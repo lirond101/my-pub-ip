@@ -2,17 +2,21 @@ import psycopg2
 import logging
 from config import config
 from instance_ips import InstanceIps
+from vault import get_db_creds
+
 logger = logging.getLogger()
+
+SECTION = 'postgresql'
 
 def check_db_connection():
     logger.debug("Before connecting to the PostgreSQL database server")
     conn = None
     result = False
     try:
-        params = config()
-        # (user, password) = get_db_creds()
-        # params['user'] = user
-        # params['password'] = password
+        params = config(section=SECTION)
+        (user, password) = get_db_creds()
+        params['user'] = user
+        params['password'] = password
         conn = psycopg2.connect(**params)
         cur = conn.cursor()
         cur.execute('SELECT version()')
@@ -36,10 +40,10 @@ def get_ip_data():
     sql = """SELECT read_id, read_time, ip_address FROM my_pub_ip.ips_read_log;"""
     conn = None
     try:
-        params = config()
-        # (user, password) = get_db_creds()
-        # params['user'] = user
-        # params['password'] = password
+        params = config(section=SECTION)
+        (user, password) = get_db_creds()
+        params['user'] = user
+        params['password'] = password
         conn = psycopg2.connect(**params)
         cur = conn.cursor()
         cur.execute(sql)
@@ -62,10 +66,10 @@ def create_ip_data(read_time, ip_address):
     logger.debug("before executing sql create_ip with read_time %s and ip_address %s", str(read_time), ip_address)
     try:
         sql = """INSERT INTO my_pub_ip.ips_read_log(read_time, ip_address) VALUES(%s, %s) RETURNING *;"""
-        params = config()
-        # (user, password) = get_db_creds()
-        # params['user'] = user
-        # params['password'] = password
+        params = config(section=SECTION)
+        (user, password) = get_db_creds()
+        params['user'] = user
+        params['password'] = password
         conn = psycopg2.connect(**params)
         cur = conn.cursor()
         cur.execute(sql, (read_time, ip_address))
@@ -87,10 +91,10 @@ def delete_ip_data(ip_address):
     rows_deleted = 0
     try:
         sql = """DELETE FROM my_pub_ip.ips_read_log WHERE ip_address = (%s);"""
-        params = config()
-        # (user, password) = get_db_creds()
-        # params['user'] = user
-        # params['password'] = password
+        params = config(section=SECTION)
+        (user, password) = get_db_creds()
+        params['user'] = user
+        params['password'] = password
         conn = psycopg2.connect(**params)
         cur = conn.cursor()
         cur.execute(sql, (ip_address, ))

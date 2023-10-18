@@ -46,3 +46,5 @@ ALTER TABLE my_pub_ip.ips_read_log ALTER COLUMN read_id SET DEFAULT nextval('rea
 -- INSERT INTO my_pub_ip.ips (ip_id, read_time, ip_address) VALUES ('test_id', NOW(), '123.123.123.123');
 -- select * from my_pub_ip.ips_log;
 -- select * from my_pub_ip.ips;
+
+CREATE ROLE vaultuser WITH LOGIN SUPERUSER PASSWORD 'vaultpassword';

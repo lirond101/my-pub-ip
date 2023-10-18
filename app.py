@@ -1,4 +1,3 @@
-import logging
 from flask import Flask, jsonify, request
 from utils.app_logging import init_logging
 from db import check_db_connection, get_ip_data, create_ip_data, delete_ip_data

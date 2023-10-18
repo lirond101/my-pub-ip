@@ -82,25 +82,26 @@ def create_ip_data(read_time, ip_address):
             conn.close()
 
 
-# def delete_ip_data(ip_id):
-#     logger.debug("before executing sql delete_ip")
-#     rows_deleted = 0
-#     try:
-#         sql = """DELETE FROM postgres.instances WHERE ip_id = (%s);"""
-#         params = config()
-#         # (user, password) = get_db_creds()
-#         # params['user'] = user
-#         # params['password'] = password
-#         conn = psycopg2.connect(**params)
-#         cur = conn.cursor()
-#         cur.execute(sql, (ip_id, ))
-#         rows_deleted = cur.rowcount
-#         conn.commit()
-#         cur.close()
-#     except psycopg2.Error as error:
-#         logger.error(error)
-#     except Exception as ex:
-#         logger.exception(ex)
-#     finally:
-#         if conn is not None:
-#             conn.close()
+def delete_ip_data(ip_address):
+    logger.debug("before executing sql delete_ip")
+    rows_deleted = 0
+    try:
+        sql = """DELETE FROM my_pub_ip.ips_read_log WHERE ip_address = (%s);"""
+        params = config()
+        # (user, password) = get_db_creds()
+        # params['user'] = user
+        # params['password'] = password
+        conn = psycopg2.connect(**params)
+        cur = conn.cursor()
+        cur.execute(sql, (ip_address, ))
+        rows_deleted = cur.rowcount
+        conn.commit()
+        cur.close()
+        logger.info("%s rows were deleted successfully", rows_deleted)
+    except psycopg2.Error as error:
+        logger.error(error)
+    except Exception as ex:
+        logger.exception(ex)
+    finally:
+        if conn is not None:
+            conn.close()

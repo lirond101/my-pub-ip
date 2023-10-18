@@ -1,7 +1,7 @@
 import logging
 from flask import Flask, jsonify, request
 from utils.app_logging import init_logging
-from db import check_db_connection, get_ip_data, create_ip_data
+from db import check_db_connection, get_ip_data, create_ip_data, delete_ip_data
 import ifcfg
 import datetime
 
@@ -35,10 +35,19 @@ def get_pub_ip():
 @app.route('/history', methods=['GET'])
 def get_history():
     try:
-        return jsonify(get_ip_data()), 200
+        return jsonify(get_ip_data().ips_as_map()), 200
     except Exception as ex:
         logger.exception(ex)
         return jsonify({'error': 'error fetching ips history because ' + str(ex)}), 500
+    
+@app.route('/delete_history/<ip_address>', methods=['GET'])
+def delete_history_by_ip(ip_address):
+    try:
+        delete_ip_data(ip_address)
+        return "ip history was deleted successfully", 200
+    except Exception as ex:
+        logger.exception(ex)
+        return jsonify({'error': 'error deleting ips history because ' + str(ex)}), 500
 
 @app.route('/network', methods=['GET'])
 def get_network_ip():

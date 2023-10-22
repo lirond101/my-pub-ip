@@ -23,7 +23,9 @@ def get_db_creds(path = '/database/creds/dbuser'):
     ''' Read secrets from the given path. '''
     try:
         client = connect_to_vault()
+        logger.debug("conn to vault - %s", client)
         result = client.read(path)
+        logger.debug("conn to vault path - %s", result)
         user = result['data']['username'].strip()
         password = result['data']['password'].strip()
         return user, password

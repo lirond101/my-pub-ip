@@ -12,11 +12,9 @@ logger = init_logging()
 @app.route('/', methods=['GET'])
 def get_pub_ip():
     try:
-        # app.logger.debug(request.headers)
         # logger.debug(request.headers)
         # logger.debug(get_ip_data().ips_as_map())
         # logger.debug(type(get_ip_data().ips_as_map()))
-        # print(request.headers)
         ip_address = ""
         if request.environ.get('HTTP_X_FORWARDED_FOR'):
             if ',' in request.environ.get('HTTP_X_FORWARDED_FOR'):

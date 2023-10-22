@@ -1,4 +1,6 @@
-export VAULT_ADDR='http://127.0.0.1:8200'
+#!/bin/sh
+
+export VAULT_ADDR="http://vault:8200"
 export VAULT_TOKEN="myroot"
 vault secrets enable database
 vault write database/config/postgresql \

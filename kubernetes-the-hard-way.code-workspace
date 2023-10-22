@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "../kubernetes-the-hard-way"
+		},
+		{
+			"path": "../jenkins_k8s"
+		},
+		{
+			"path": "../cicd-k8s"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "../Opsschool/kandula-app-9"
+		},
+		{
+			"path": "../Opsschool/db"
+		}
+	],
+	"settings": {}
+}
